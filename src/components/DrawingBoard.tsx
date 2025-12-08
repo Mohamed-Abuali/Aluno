@@ -7,6 +7,7 @@ const DrawingBoard = () => {
   
     let lastX = 0
     let lastY = 0
+    let isDrawing = false;
     const myCanvas = document.getElementById('myCanvas')
 
     
@@ -24,10 +25,10 @@ const DrawingBoard = () => {
     const draw = (ctx:any,canvas:any) => {
         
 
-        let draw = false;
+        
      
         myCanvas?.addEventListener('mousedown',(e) => {
-            draw=true;
+            isDrawing=true;
             const {x,y} = getCanvesCoordinates(e,canvas);
             lastX = x;
             lastY = y;
@@ -37,7 +38,7 @@ const DrawingBoard = () => {
 
         })
         myCanvas?.addEventListener('mousemove',(e)=> {
-            if(!draw) return;
+            if(!isDrawing) return;
             const {x,y} =  getCanvesCoordinates(e,canvas);;
             const currentX= x;
             const currentY = y;
@@ -50,23 +51,21 @@ const DrawingBoard = () => {
 
         })
         myCanvas?.addEventListener('mouseup',() => {
-            draw=false;
+            isDrawing=false;
             ctx.closePath()
         })
     }
 
- useEffect(() => {
-    const canvas = canvasRef.current
-    if(!canvas) return;
-
-    const ctx = canvas.getContext('2d')
-   // ctx.fillStyle = "black"
-    ctx.lineWidth = 5; 
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = 'red';
-    draw(ctx,canvas)
- },[draw])
+        useEffect(() => {
+            const canvas = canvasRef.current
+            const ctx = canvas.getContext('2d')
+            //ctx.fillStyle = "black"
+            ctx.lineWidth = 5; 
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = 'red';
+            draw(ctx,canvas)
+        },[isDrawing])
     
     
  
