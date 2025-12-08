@@ -1,71 +1,116 @@
-import { useEffect, useRef } from 'react'
-// import useMousePosition from '../hooks/useMousePosition'
+import { useEffect, useRef, useState,useCallback } from 'react'
+ import useMousePosition from '../hooks/useMousePosition'
 
 const DrawingBoard = () => {
-  //  const usePos = useMousePosition();
+  const usePos = useMousePosition();
     const canvasRef = useRef(null)
-  
-    let lastX = 0
-    let lastY = 0
-    let isDrawing = false;
-    const myCanvas = document.getElementById('myCanvas')
-
-    
-    const getCanvesCoordinates =(e:MouseEvent,canvas:any)=> {
-        
+    const [isDrawing,setIsDrawing] = useState(false)
+    const coordiRef = useRef({x:0,y:0})
+   
+    //const myCanvas = document.getElementById('myCanvas')
+   
+    const getCanvesCoordinates = useCallback((e:MouseEvent) => {
+        const canvas = canvasRef.current
+        if(!canvas) return {x:0,y:0};
         const rest  =  canvas.getBoundingClientRect();
         return {
             x: e.clientX - rest.left, 
             y: e.clientY - rest.top
         }
-    }
+    },[])
 
 
 
-    const draw = (ctx:any,canvas:any) => {
-        
 
-        
-     
-        myCanvas?.addEventListener('mousedown',(e) => {
-            isDrawing=true;
-            const {x,y} = getCanvesCoordinates(e,canvas);
-            lastX = x;
-            lastY = y;
+        //handles when the maouse is clicked on button down
+        const handleMouseDown = useCallback((e:MouseEvent) => {
+           const canvas = canvasRef.current
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d')
+            if(!ctx) return;
+            //if(isDrawing) return;
+          
+           
+            const {x,y} = getCanvesCoordinates(e);
+            coordiRef.current = {x,y}
             ctx.beginPath()
-            ctx.moveTo(lastX,lastY)
+            ctx.moveTo(x,y)
+            setIsDrawing(true);
 
+        },[getCanvesCoordinates])
 
-        })
-        myCanvas?.addEventListener('mousemove',(e)=> {
+        // handles when the mouse is moving inside  the canvas
+        const handleMouseMove = useCallback((e:MouseEvent) => {
+
+            const canvas = canvasRef.current
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d')
+            if(!ctx) return;
             if(!isDrawing) return;
-            const {x,y} =  getCanvesCoordinates(e,canvas);;
-            const currentX= x;
-            const currentY = y;
-            console.log(currentX,currentY)
-            ctx.lineTo(currentX,currentY)
+            const {x,y} =  getCanvesCoordinates(e);
+          
+            console.log(x,y)
+            ctx.lineTo(x,y)
             ctx.stroke()
-            if(currentX && currentY){
-                [lastX,lastY] =[currentX,currentY]
-            }
+           coordiRef.current = {x,y}
 
-        })
-        myCanvas?.addEventListener('mouseup',() => {
-            isDrawing=false;
+        },[isDrawing,getCanvesCoordinates])
+
+
+
+        //Handle when the mouse button is up
+        const handleMouseUp = useCallback(() => {
+            //if(!isDrawing) return;
+            const canvas = canvasRef.current
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d')
+            if(!ctx) return;
+            setIsDrawing(false);
             ctx.closePath()
-        })
-    }
+        },[isDrawing])
+
+
+
+        //Hnadle when the mouse leaves the canves
+        const handleMouseLeave = useCallback(() => {
+            if(!isDrawing) return;
+            const canvas = canvasRef.current
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d')
+            if(!ctx) return;
+            setIsDrawing(false);
+            ctx.closePath()
+        },[isDrawing])    
+
+
+
 
         useEffect(() => {
             const canvas = canvasRef.current
+            if(!canvas) return;
             const ctx = canvas.getContext('2d')
-            //ctx.fillStyle = "black"
+            if(!ctx) return;
             ctx.lineWidth = 5; 
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.strokeStyle = 'red';
-            draw(ctx,canvas)
-        },[isDrawing])
+            
+            //ctx.fillStyle = "black"
+
+           
+           
+            canvas.addEventListener('mousedown',handleMouseDown)
+            canvas.addEventListener('mousemove',handleMouseMove)
+            canvas.addEventListener('mouseup',handleMouseUp)
+            canvas.addEventListener('mouseleave',handleMouseLeave)
+
+            return () => {
+            canvas.addEventListener('mousedown',handleMouseDown)
+             canvas.addEventListener('mousemove',handleMouseMove)
+              canvas.addEventListener('mouseup',handleMouseUp)
+              canvas.addEventListener('mouseleave',handleMouseLeave)
+            }
+        },[handleMouseDown,handleMouseMove,handleMouseUp])
     
     
  
