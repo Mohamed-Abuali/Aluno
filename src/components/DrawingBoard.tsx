@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState,useCallback } from 'react'
+import { useEffect, useRef, useState,useCallback ,use} from 'react'
  import useMousePosition from '../hooks/useMousePosition'
 
 const DrawingBoard = () => {
@@ -28,7 +28,7 @@ const DrawingBoard = () => {
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
-            //if(isDrawing) return;
+            if(isDrawing) return;
           
            
             const {x,y} = getCanvesCoordinates(e);
@@ -60,11 +60,13 @@ const DrawingBoard = () => {
 
         //Handle when the mouse button is up
         const handleMouseUp = useCallback(() => {
-            //if(!isDrawing) return;
+            if(!isDrawing) return;
+            
             const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
+            console.log("mouse Up")
             setIsDrawing(false);
             ctx.closePath()
         },[isDrawing])
@@ -110,7 +112,7 @@ const DrawingBoard = () => {
               canvas.addEventListener('mouseup',handleMouseUp)
               canvas.addEventListener('mouseleave',handleMouseLeave)
             }
-        },[handleMouseDown,handleMouseMove,handleMouseUp])
+        },[handleMouseDown,handleMouseMove,handleMouseUp,handleMouseLeave])
     
     
  
