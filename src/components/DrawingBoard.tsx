@@ -6,7 +6,7 @@ const DrawingBoard = () => {
     const canvasRef = useRef(null)
     const [isDrawing,setIsDrawing] = useState(false)
     const coordiRef = useRef({x:0,y:0})
-   
+    let drawing = false;
     //const myCanvas = document.getElementById('myCanvas')
    
     const getCanvesCoordinates = useCallback((e:MouseEvent) => {
@@ -24,18 +24,20 @@ const DrawingBoard = () => {
 
         //handles when the maouse is clicked on button down
         const handleMouseDown = useCallback((e:MouseEvent) => {
+           // setIsDrawing(true);
+           
            const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
-            if(isDrawing) return;
-          
+            if(drawing) return;
+          drawing = true
            console.log("mouse Down",isDrawing)
             const {x,y} = getCanvesCoordinates(e);
             coordiRef.current = {x,y}
             ctx.beginPath()
             ctx.moveTo(x,y)
-            setIsDrawing(true);
+            ctx.lineTo(x,y)
 
         },[getCanvesCoordinates])
 
@@ -46,32 +48,33 @@ const DrawingBoard = () => {
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
-            if(!isDrawing) return;
+            if(!drawing) return;
             const {x,y} =  getCanvesCoordinates(e);
-            console.log(isDrawing)
+            console.log(drawing)
             ctx.lineTo(x,y)
             ctx.stroke()
            coordiRef.current = {x,y}
 
-        },[isDrawing,getCanvesCoordinates])
+        },[drawing,getCanvesCoordinates])
 
 
 
         //Handle when the mouse button is up
         const handleMouseUp = useCallback(() => {
             //if(!isDrawing) return;
-            
-            const canvas = canvasRef.current
+//setIsDrawing(false);
+                drawing = false
+const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
-            if(!isDrawing) return;
+            if(!drawing) return;
             
             ctx.closePath()
-            setIsDrawing(false);
+            
             console.log("mouse Up",isDrawing)
             
-        },[isDrawing])
+        },[drawing])
 
 
 
@@ -82,9 +85,10 @@ const DrawingBoard = () => {
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
-            setIsDrawing(false);
+            //setIsDrawing(false);
+            drawing = false;
             ctx.closePath()
-        },[isDrawing])    
+        },[drawing])    
 
 
 
@@ -110,9 +114,9 @@ const DrawingBoard = () => {
 
             return () => {
             canvas.addEventListener('mousedown',handleMouseDown)
-             canvas.addEventListener('mousemove',handleMouseMove)
-              canvas.addEventListener('mouseup',handleMouseUp)
-              canvas.addEventListener('mouseleave',handleMouseLeave)
+            canvas.addEventListener('mousemove',handleMouseMove)
+            canvas.addEventListener('mouseup',handleMouseUp)
+            canvas.addEventListener('mouseleave',handleMouseLeave)
             }
         },[handleMouseDown,handleMouseMove,handleMouseUp,handleMouseLeave])
     

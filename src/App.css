@@ -16,9 +16,46 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+
+  --main-color:#0D0628;
+  --highlight:#788BFF;
+  --icons:#5465FF;
+  --text:#EFF1F3;
+  --shadows:#223843;
+  --warning:#D77A61;
+  --success:#81F499;
 }
 .container{
   width: 100%;
-
+  position: relative;
 }
+.sideBarToolContainer{
+  width: 3rem;
+  min-height: 20rem;
+  
+  border-radius: 24px;
+  background-color: var(--main-color);
+  position: absolute;
+  left:1rem;
+  top:25%;
+  z-index: 99;
+ padding: 15px 0px;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+}
+ 
+.icon{
+      color: var(--icons);
+      list-style: none;
+      font-weight:bold;
+      scale: 1.2;
+      &:hover{
+        color: var(--highlight);
+        cursor: pointer;
+      }
+    }
 
