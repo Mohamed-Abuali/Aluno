@@ -49,9 +49,9 @@
 }
  
 .icon{
-      color: var(--icons);
+      color: var(--text);
       list-style: none;
-      font-weight:bold;
+      font-weight:bolder;
       scale: 1.2;
       &:hover{
         color: var(--highlight);
