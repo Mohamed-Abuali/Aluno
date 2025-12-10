@@ -1,9 +1,14 @@
-import React from 'react'
+
+import { LuMoonStar } from "react-icons/lu";
 
 const NavBar = () => {
   return (
     <div className='navbar-container'>
         <nav>
+            <div className="logo-wrapper">
+            <LuMoonStar className="logo"/>
+            <p className="logo">Aluno</p>
+            </div>
             <ul>
                 <li>file</li>
                 <li>edit</li>

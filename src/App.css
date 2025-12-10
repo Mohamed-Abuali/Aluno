@@ -72,9 +72,10 @@ body{
   background-color: var(--main-color);
   nav{
     display:flex;
+    padding: 0px 10px;
     width: 100%;
     justify-content: start;
-    align-items: start;
+    align-items: center;
     ul{
 
       display: flex;
@@ -93,5 +94,18 @@ body{
         
       }
     }
+    .logo-wrapper{
+      display: flex;
+      gap:2px;
+      width: auto;
+      justify-content: center;
+      align-items: center;
+    }
+    .logo{
+      color: var(--icons);
+      font-weight: 800;
+      font-size: medium;
+    }
+    
   }
 }
