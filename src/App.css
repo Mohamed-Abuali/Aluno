@@ -26,6 +26,10 @@
   --warning:#D77A61;
   --success:#81F499;
 }
+body{
+  padding: 0;
+  margin: 0;
+}
 .container{
   width: 100%;
   position: relative;
@@ -58,4 +62,36 @@
         cursor: pointer;
       }
     }
+.navbar-container{
+  position: absolute;
+  z-index: 99;
+  top: 0;
+  left:0;
+  width: 100dvw;
+  height: 2.6rem;
+  background-color: var(--main-color);
+  nav{
+    display:flex;
+    width: 100%;
+    justify-content: start;
+    align-items: start;
+    ul{
 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+
+      li{
+        color:var(--text);
+        list-style: none;
+       padding: 0px 20px;
+       cursor: pointer;
+        &:hover{
+          background-color: var(--highlight);
+        }
+        
+      }
+    }
+  }
+}
