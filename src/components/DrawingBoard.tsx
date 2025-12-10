@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState,useCallback } from 'react'
  import useMousePosition from '../hooks/useMousePosition'
+import {useChangeTool}  from '../../store/toolStore'
 
 const DrawingBoard = () => {
+
+    const toolName = useChangeTool((state) => state.tool)
+
+
+
   const usePos = useMousePosition();
     const canvasRef = useRef(null)
     const [isDrawing,setIsDrawing] = useState(false)
@@ -20,7 +26,7 @@ const DrawingBoard = () => {
     },[])
 
 
-
+        console.log(toolName)
 
         //handles when the maouse is clicked on button down
         const handleMouseDown = useCallback((e:MouseEvent) => {
