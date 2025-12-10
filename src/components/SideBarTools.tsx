@@ -5,7 +5,7 @@ const SideBarTools = () => {
     <div className='sideBarToolContainer'>
         
         {toolBar.map((e,i) => (
-            <span className='icon'><e.icon/></span>
+            <span key={i} className='icon'><e.icon/></span>
         ))}
       
     </div>

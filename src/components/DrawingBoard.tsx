@@ -32,7 +32,7 @@ const DrawingBoard = () => {
             if(!ctx) return;
             if(drawing) return;
           drawing = true
-           console.log("mouse Down",isDrawing)
+           //console.log("mouse Down",isDrawing)
             const {x,y} = getCanvesCoordinates(e);
             coordiRef.current = {x,y}
             ctx.beginPath()
@@ -50,7 +50,7 @@ const DrawingBoard = () => {
             if(!ctx) return;
             if(!drawing) return;
             const {x,y} =  getCanvesCoordinates(e);
-            console.log(drawing)
+            //console.log(drawing)
             ctx.lineTo(x,y)
             ctx.stroke()
            coordiRef.current = {x,y}
@@ -72,7 +72,7 @@ const canvas = canvasRef.current
             
             ctx.closePath()
             
-            console.log("mouse Up",isDrawing)
+            //console.log("mouse Up",isDrawing)
             
         },[drawing])
 

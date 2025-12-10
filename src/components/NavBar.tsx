@@ -1,5 +1,6 @@
 
 import { LuMoonStar } from "react-icons/lu";
+import DropDownMenu from "./DropDownMenu";
 
 const NavBar = () => {
   return (
@@ -10,7 +11,9 @@ const NavBar = () => {
             <p className="logo">Aluno</p>
             </div>
             <ul>
-                <li>file</li>
+                <li>
+                   <DropDownMenu title="File" options={['New File','Open File','Save File']}/>
+                </li>
                 <li>edit</li>
                 <li>about</li>
             </ul>
