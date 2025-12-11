@@ -30,7 +30,8 @@ const DrawingBoard = () => {
             ctx.lineTo(x,y)
                 break;
             case "Paint Bucket":
-                ctx.fillStyle = 'black';
+                ctx.fillStyle = color;
+                ctx.fill()
                 break;
             default:
                 break;    
