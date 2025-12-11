@@ -8,7 +8,7 @@ type ToolChange = {
 }
 
 export const useChangeTool = create<ToolsProp & ToolChange>((set) => ({
-    tool:"",
+    tool:"Brush",
     change:(tool) =>set(() => ({tool:tool}))
     
 }))

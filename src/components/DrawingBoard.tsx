@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState,useCallback } from 'react'
  import useMousePosition from '../hooks/useMousePosition'
 import {useChangeTool}  from '../../store/toolStore'
+import image from '../assets/g.jpg'
+
+interface toolProps {
+    tool:string,
+    ctx:any,
+    x:number,
+    y:number,
+}
+
+
+
 
 const DrawingBoard = () => {
 
@@ -14,7 +25,24 @@ const DrawingBoard = () => {
     const coordiRef = useRef({x:0,y:0})
     let drawing = false;
     //const myCanvas = document.getElementById('myCanvas')
-   
+    const useTool = ({tool,ctx,x,y}:toolProps) => {
+        switch(tool){
+            case "Brush":
+            ctx.beginPath()
+            ctx.moveTo(x,y)
+            ctx.lineTo(x,y)
+                break;
+            case "Paint Bucket":
+                ctx.fillStyle = 'black';
+                break;
+                
+            default:
+                break;    
+        }
+    }
+
+
+
     const getCanvesCoordinates = useCallback((e:MouseEvent) => {
         const canvas = canvasRef.current
         if(!canvas) return {x:0,y:0};
@@ -41,11 +69,15 @@ const DrawingBoard = () => {
            //console.log("mouse Down",isDrawing)
             const {x,y} = getCanvesCoordinates(e);
             coordiRef.current = {x,y}
-            ctx.beginPath()
-            ctx.moveTo(x,y)
-            ctx.lineTo(x,y)
+            // if(toolName.includes("Brush")){
+            //     console.log("brush start")
+            // ctx.beginPath()
+            // ctx.moveTo(x,y)
+            // ctx.lineTo(x,y)
+            // }
+            useTool({tool:toolName,ctx,x,y})
 
-        },[getCanvesCoordinates])
+        },[getCanvesCoordinates,toolName])
 
         // handles when the mouse is moving inside  the canvas
         const handleMouseMove = useCallback((e:MouseEvent) => {
@@ -57,11 +89,14 @@ const DrawingBoard = () => {
             if(!drawing) return;
             const {x,y} =  getCanvesCoordinates(e);
             //console.log(drawing)
+            if(toolName.includes("Brush")){
+                console.log("brush on")
             ctx.lineTo(x,y)
             ctx.stroke()
-           coordiRef.current = {x,y}
+            }
+            coordiRef.current = {x,y}
 
-        },[drawing,getCanvesCoordinates])
+        },[drawing,getCanvesCoordinates,toolName])
 
 
 
@@ -69,8 +104,8 @@ const DrawingBoard = () => {
         const handleMouseUp = useCallback(() => {
             //if(!isDrawing) return;
 //setIsDrawing(false);
-                drawing = false
-const canvas = canvasRef.current
+            drawing = false
+            const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
@@ -80,7 +115,7 @@ const canvas = canvasRef.current
             
             //console.log("mouse Up",isDrawing)
             
-        },[drawing])
+        },[drawing,toolName])
 
 
 
@@ -94,7 +129,7 @@ const canvas = canvasRef.current
             //setIsDrawing(false);
             drawing = false;
             ctx.closePath()
-        },[drawing])    
+        },[drawing,toolName])    
 
 
 
@@ -105,9 +140,14 @@ const canvas = canvasRef.current
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
             ctx.lineWidth = 5; 
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
+            ctx.lineCap = 'square';
+            ctx.lineJoin = 'square';
             ctx.strokeStyle = 'red';
+            const img = new Image()
+            img.onload = () => {
+                ctx.drawImage(img,0,0)
+            }
+            img.src = image;
             
             //ctx.fillStyle = "black"
 
@@ -124,7 +164,7 @@ const canvas = canvasRef.current
             canvas.addEventListener('mouseup',handleMouseUp)
             canvas.addEventListener('mouseleave',handleMouseLeave)
             }
-        },[handleMouseDown,handleMouseMove,handleMouseUp,handleMouseLeave])
+        },[handleMouseDown,handleMouseMove,handleMouseUp,handleMouseLeave,toolName])
     
     
  
