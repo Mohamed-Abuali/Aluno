@@ -1,4 +1,5 @@
 import "./App.css";
+import ColorTable from "./components/ColorTable";
 import DrawingBoard from "./components/DrawingBoard";
 import NavBar from "./components/NavBar";
 import SideBarTools from "./components/SideBarTools";
@@ -14,6 +15,7 @@ function App() {
       <NavBar/>
       <DrawingBoard/>
       <SideBarTools/>
+      <ColorTable/>
     </main>
   );
 }

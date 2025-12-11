@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState,useCallback } from 'react'
- import useMousePosition from '../hooks/useMousePosition'
 import {useChangeTool}  from '../../store/toolStore'
-import image from '../assets/g.jpg'
-
+import {useChangeColor}  from '../../store/colorStore'
 interface toolProps {
     tool:string,
     ctx:any,
@@ -16,14 +14,13 @@ interface toolProps {
 const DrawingBoard = () => {
 
     const toolName = useChangeTool((state) => state.tool)
+    const color = useChangeColor((state) => state.color)
 
 
-
-  const usePos = useMousePosition();
     const canvasRef = useRef(null)
-    const [isDrawing,setIsDrawing] = useState(false)
+    const [drawing,setDrawing] = useState(false)
     const coordiRef = useRef({x:0,y:0})
-    let drawing = false;
+    
     //const myCanvas = document.getElementById('myCanvas')
     const useTool = ({tool,ctx,x,y}:toolProps) => {
         switch(tool){
@@ -35,7 +32,6 @@ const DrawingBoard = () => {
             case "Paint Bucket":
                 ctx.fillStyle = 'black';
                 break;
-                
             default:
                 break;    
         }
@@ -65,7 +61,7 @@ const DrawingBoard = () => {
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
             if(drawing) return;
-          drawing = true
+          setDrawing(true)
            //console.log("mouse Down",isDrawing)
             const {x,y} = getCanvesCoordinates(e);
             coordiRef.current = {x,y}
@@ -89,8 +85,8 @@ const DrawingBoard = () => {
             if(!drawing) return;
             const {x,y} =  getCanvesCoordinates(e);
             //console.log(drawing)
-            if(toolName.includes("Brush")){
-                console.log("brush on")
+            if(toolName === "Brush"){
+                console.log("brush on",toolName)
             ctx.lineTo(x,y)
             ctx.stroke()
             }
@@ -104,7 +100,7 @@ const DrawingBoard = () => {
         const handleMouseUp = useCallback(() => {
             //if(!isDrawing) return;
 //setIsDrawing(false);
-            drawing = false
+            setDrawing(false)
             const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
@@ -121,13 +117,13 @@ const DrawingBoard = () => {
 
         //Hnadle when the mouse leaves the canves
         const handleMouseLeave = useCallback(() => {
-            if(!isDrawing) return;
+            if(!drawing) return;
             const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
             //setIsDrawing(false);
-            drawing = false;
+            setDrawing(false)
             ctx.closePath()
         },[drawing,toolName])    
 
@@ -142,12 +138,12 @@ const DrawingBoard = () => {
             ctx.lineWidth = 5; 
             ctx.lineCap = 'square';
             ctx.lineJoin = 'square';
-            ctx.strokeStyle = 'red';
-            const img = new Image()
-            img.onload = () => {
-                ctx.drawImage(img,0,0)
-            }
-            img.src = image;
+            ctx.strokeStyle = color;
+            // const img = new Image()
+            // img.onload = () => {
+            //     ctx.drawImage(img,0,0)
+            // }
+            // img.src = image;
             
             //ctx.fillStyle = "black"
 
@@ -159,10 +155,10 @@ const DrawingBoard = () => {
             canvas.addEventListener('mouseleave',handleMouseLeave)
 
             return () => {
-            canvas.addEventListener('mousedown',handleMouseDown)
-            canvas.addEventListener('mousemove',handleMouseMove)
-            canvas.addEventListener('mouseup',handleMouseUp)
-            canvas.addEventListener('mouseleave',handleMouseLeave)
+            canvas.removeEventListener('mousedown',handleMouseDown)
+            canvas.removeEventListener('mousemove',handleMouseMove)
+            canvas.removeEventListener('mouseup',handleMouseUp)
+            canvas.removeEventListener('mouseleave',handleMouseLeave)
             }
         },[handleMouseDown,handleMouseMove,handleMouseUp,handleMouseLeave,toolName])
     
