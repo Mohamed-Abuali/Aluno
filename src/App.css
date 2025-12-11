@@ -63,6 +63,9 @@ body{
         cursor: pointer;
       }
     }
+.color-icon-active{
+  color:var(--icons)
+}    
 .navbar-container{
   position: absolute;
   z-index: 99;
@@ -190,42 +193,46 @@ body{
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 100%;
-    background-color: #788BFF;
+    
   cursor: pointer;
+  box-shadow:  0px 0px 10px var(--text);
   }
   
   .color-table-list{
     position: absolute;
-    width: 14rem;
-    height: 5rem;
+    width: 18.2rem;
+    height: 4rem;
     background-color: #223843;
     left: 3.4rem;
     bottom:0rem;
-    border-radius: 24px;
-    padding: 10px 14px;
+    border-radius: 16px;
+    padding: 10px 10px;
     display: flex;
     flex-wrap: wrap;
     justify-content: start;
     align-items: center;
     gap:5px;
-  
+    transition: 300ms all ease-in-out;
 
   }
     .color-list-item{
     width: 1.5rem;
     height: 1.5rem;
-    border-radius: 100%;
+    border-radius: 8px;
     cursor: pointer;
+
     
 
   }
   .color-open{
+    visibility: visible;
     transform:  translateX(0%);
     opacity: 100;
-    visibility: visible;
+    
   }
   .color-close{
-    transform: translateX(50%);
+    
+    transform: translateX(10%);
     opacity: 0;
     visibility: hidden;
 

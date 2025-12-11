@@ -9,7 +9,7 @@ type ColorChange ={
 }
 
 export const useChangeColor = create<Color & ColorChange>((set) => ({
-    color:"",
+    color:"#000000",
     changeColor:(color) => set(() => ({color:color}))
 
 }))

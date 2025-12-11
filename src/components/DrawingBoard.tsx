@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState,useCallback } from 'react'
 import {useChangeTool}  from '../../store/toolStore'
 import {useChangeColor}  from '../../store/colorStore'
-interface toolProps {
-    tool:string,
-    ctx:any,
-    x:number,
-    y:number,
-}
+
 
 
 
@@ -20,23 +15,10 @@ const DrawingBoard = () => {
     const canvasRef = useRef(null)
     const [drawing,setDrawing] = useState(false)
     const coordiRef = useRef({x:0,y:0})
+    const startCoordiRef = useRef({x:0,y:0})
     
     //const myCanvas = document.getElementById('myCanvas')
-    const useTool = ({tool,ctx,x,y}:toolProps) => {
-        switch(tool){
-            case "Brush":
-            ctx.beginPath()
-            ctx.moveTo(x,y)
-            ctx.lineTo(x,y)
-                break;
-            case "Paint Bucket":
-                ctx.fillStyle = color;
-                ctx.fill()
-                break;
-            default:
-                break;    
-        }
-    }
+
 
 
 
@@ -62,17 +44,35 @@ const DrawingBoard = () => {
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
             if(drawing) return;
-          setDrawing(true)
+            setDrawing(true)
            //console.log("mouse Down",isDrawing)
             const {x,y} = getCanvesCoordinates(e);
             coordiRef.current = {x,y}
-            // if(toolName.includes("Brush")){
-            //     console.log("brush start")
-            // ctx.beginPath()
-            // ctx.moveTo(x,y)
-            // ctx.lineTo(x,y)
-            // }
-            useTool({tool:toolName,ctx,x,y})
+            startCoordiRef.current = {x,y}
+
+
+            switch(toolName){
+                case "Brush":
+                    ctx.beginPath()
+                    ctx.moveTo(x,y)
+                    ctx.lineTo(x,y)
+                    break;
+                case "Paint Bucket":
+                    ctx.fillStyle = color;
+                    ctx.fill()
+                    break;
+                case "Circle":
+                    ctx.beginPath()
+                    // ctx.arc(x,y,50,0,Math.PI * 2)
+                    // ctx.stroke()
+                    // ctx.strokeStyle = color;
+                    break;
+                case "Rectangle":
+                    ctx.beginPath()
+                    break;
+                default:
+                    break;    
+        }
 
         },[getCanvesCoordinates,toolName])
 
@@ -85,12 +85,26 @@ const DrawingBoard = () => {
             if(!ctx) return;
             if(!drawing) return;
             const {x,y} =  getCanvesCoordinates(e);
-            //console.log(drawing)
-            if(toolName === "Brush"){
-                console.log("brush on",toolName)
-            ctx.lineTo(x,y)
-            ctx.stroke()
-            }
+
+            switch(toolName){
+                case "Brush":
+                    ctx.lineTo(x,y)
+                    ctx.stroke()
+                    break;
+                case "Circle":
+                    // ctx.beginPath()
+                    // ctx.arc(x,y,50,0,Math.PI * 2)
+                    // ctx.stroke()
+                    // ctx.strokeStyle = color;
+                    break;
+                case "Rectangle":
+
+                    
+
+                    break;
+                default:
+                    break;    
+        }
             coordiRef.current = {x,y}
 
         },[drawing,getCanvesCoordinates,toolName])
@@ -99,18 +113,37 @@ const DrawingBoard = () => {
 
         //Handle when the mouse button is up
         const handleMouseUp = useCallback(() => {
-            //if(!isDrawing) return;
-//setIsDrawing(false);
+            if(!drawing) return;
+
             setDrawing(false)
             const canvas = canvasRef.current
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
+            const w = Math.abs(startCoordiRef.current.x - coordiRef.current.x)
+            const h = Math.abs(startCoordiRef.current.y - coordiRef.current.y)
+            // const boxX= Math.min(startCoordiRef.current.y , coordiRef.current.y)
+            // const boxY= Math.min(startCoordiRef.current.y , coordiRef.current.y)
             if(!drawing) return;
-            
+                        switch(toolName){
+
+                case "Circle":
+                   
+                    ctx.arc(startCoordiRef.current.x,startCoordiRef.current.y,w,0,Math.PI * 2)
+                    ctx.stroke()
+                    ctx.strokeStyle = color;
+                    break;
+                case "Rectangle":
+                    ctx.rect(startCoordiRef.current.x,startCoordiRef.current.y,w,h)            
+                    ctx.stroke()
+                    ctx.strokeStyle = color;
+                    break;
+                default:
+                    break;    
+        }
             ctx.closePath()
             
-            //console.log("mouse Up",isDrawing)
+            
             
         },[drawing,toolName])
 
@@ -123,7 +156,6 @@ const DrawingBoard = () => {
             if(!canvas) return;
             const ctx = canvas.getContext('2d')
             if(!ctx) return;
-            //setIsDrawing(false);
             setDrawing(false)
             ctx.closePath()
         },[drawing,toolName])    
@@ -146,7 +178,7 @@ const DrawingBoard = () => {
             // }
             // img.src = image;
             
-            //ctx.fillStyle = "black"
+            
 
            
            
