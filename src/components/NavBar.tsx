@@ -3,14 +3,16 @@ import { LuMoonStar } from "react-icons/lu";
 import DropDownMenu from "./DropDownMenu";
 
 const NavBar = () => {
-  const canvas = document.getElementById("myCanvas")
-  console.log(canvas)
+  
   const handleImageSave = () => {
+    const canvas = document.getElementById("myCanvas")
     const link  = document.createElement("a");
+    console.log(canvas)
     console.log(link)
-    link.href = canvas ? canvas.toDataURL("image/jpeg") : "";
-    link.download = "aluno.jpeg"
-    link.click()
+    const image = canvas ? canvas.toDataURL("image/png",0.95) : "";
+    // window.open(image)
+      const base64 = image.split(",")[1];
+       window.__TAURI__.invoke("save_image", { base64 });
 
   }
 
