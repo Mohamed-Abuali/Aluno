@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 
 interface DropDownProp {
     title:string,
-    options:string[]
+    children:React.ReactNode
 
 }
-const DropDownMenu = ({title,options}:DropDownProp) => {
+const DropDownMenu = ({title,children}:DropDownProp) => {
 
     const [isOpen,setIsOpen] = useState(false)
     console.log(isOpen)
@@ -18,9 +18,7 @@ const DropDownMenu = ({title,options}:DropDownProp) => {
     <div onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)} className="dropdown-container">
         <span  className="dropdown-title">{title}</span>
         <div className={`dropdown-options  ${isOpen ? 'dp-open': 'dp-close'}`}>
-            {options.map((o,i) => (
-                <span key={i}>{o}</span>
-            ))}
+           {children}
         </div>
     </div>
   )

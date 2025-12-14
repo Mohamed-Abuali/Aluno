@@ -163,7 +163,7 @@ body{
 
 }
   .dp-open{
-    transform: translateY(25%) translateX(0%);
+    transform: translateY(50%) translateX(0%);
     opacity: 100;
     visibility: visible;
   }

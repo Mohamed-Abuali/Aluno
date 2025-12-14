@@ -3,6 +3,18 @@ import { LuMoonStar } from "react-icons/lu";
 import DropDownMenu from "./DropDownMenu";
 
 const NavBar = () => {
+  const canvas = document.getElementById("myCanvas")
+  console.log(canvas)
+  const handleImageSave = () => {
+    const link  = document.createElement("a");
+    console.log(link)
+    link.href = canvas ? canvas.toDataURL("image/jpeg") : "";
+    link.download = "aluno.jpeg"
+    link.click()
+
+  }
+
+
   return (
     <div className='navbar-container'>
         <nav>
@@ -12,7 +24,9 @@ const NavBar = () => {
             </div>
             <ul>
                 <li>
-                   <DropDownMenu title="File" options={['New File','Open File','Save File']}/>
+                   <DropDownMenu title="File">
+                      <span onClick={handleImageSave}>Save</span>
+                    </DropDownMenu>
                 </li>
                 <li>edit</li>
                 <li>about</li>
